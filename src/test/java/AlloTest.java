@@ -10,12 +10,10 @@ public class AlloTest {
 
     @Test
     public void testAlloLogoVisibility() throws InterruptedException {
-
         driver = new ChromeDriver();
         driver.manage().window().maximize();
 
         driver.get("https://allo.ua/");
-
         Thread.sleep(5000);
 
         WebElement alloLogo = driver.findElement(By.xpath("//a[@class='v-logo']"));
@@ -26,10 +24,8 @@ public class AlloTest {
 
     @Test
     public void testAlloSearchFunctionality() throws InterruptedException {
-
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-
         driver.get("https://allo.ua/");
 
         Thread.sleep(5000);
@@ -54,10 +50,8 @@ public class AlloTest {
 
     @Test
     public void testAlloProductDetailVerification() throws InterruptedException {
-
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-
         driver.get("https://allo.ua/");
 
         WebElement alloLogo = driver.findElement(By.xpath("//a[@class='v-logo']"));
@@ -87,6 +81,43 @@ public class AlloTest {
 
         Assert.assertEquals(actualProductName, savedProductName,
                 "Назва товару на детальній сторінці не збігається з назвою в результатах пошуку!");
+
+        driver.quit();
+    }
+
+    @Test
+    public void testAlloBuyersSectionVerification() throws InterruptedException {
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+        driver.get("https://allo.ua/");
+        Thread.sleep(3000);
+
+        WebElement buyersButton = driver.findElement(By.xpath("//span[contains(text(), 'Покупцям')]"));
+        Assert.assertTrue(buyersButton.isDisplayed(), "Кнопка 'Покупцям' не відображається!");
+        buyersButton.click();
+        Thread.sleep(2000);
+
+        WebElement dropdownMenu = driver.findElement(By.xpath("//div[contains(@class, 'mh-button__dropdown')]"));
+        Assert.assertTrue(dropdownMenu.isDisplayed(), "Випадаюче меню 'Покупцям' не відкрилося!");
+
+        WebElement deliveryOption = driver.findElement(By.xpath("//div[contains(@class, 'mh-button__dropdown')]//a[contains(@href, 'shipment_payment')]"));
+        Assert.assertTrue(deliveryOption.isDisplayed(), "Пункт 'Доставка та оплата' не відображається в меню!");
+        deliveryOption.click();
+        Thread.sleep(5000);
+
+        String tabTitle = driver.getTitle();
+        Assert.assertTrue(tabTitle.toLowerCase().contains("доставка"),
+                "Тайтл вкладки браузера не містить згадки про доставку! Поточний тайтл: " + tabTitle);
+
+        WebElement helpMenuContainer = driver.findElement(By.xpath("//div[@class='sp-main-tab']"));
+        Assert.assertTrue(helpMenuContainer.isDisplayed(), "Блок меню розділів допомоги 'sp-main-tab' не відображається на сторінці!");
+
+        WebElement howToOrderButton = driver.findElement(By.xpath("//div[@class='sp-main-tab']//button[contains(text(), 'Як оформити замовлення')]"));
+        Assert.assertTrue(howToOrderButton.isDisplayed(), "Кнопка 'Як оформити замовлення?' не відображається!");
+
+        Assert.assertTrue(howToOrderButton.getText().contains("Як оформити замовлення"),
+                "Текст на кнопці не відповідає очікуваному! Знайдено: " + howToOrderButton.getText());
 
         driver.quit();
     }
