@@ -1,34 +1,35 @@
+package tests;
+
+import basesClass.TestInit;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.HomePage;
 
-public class AlloTest {
-    private WebDriver driver;
+import static java.lang.Thread.sleep;
+
+public class HomePageTest extends TestInit {
+
+    public String alloUrl = "https://allo.ua";
 
     @Test
-    public void testAlloLogoVisibility() throws InterruptedException {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+    public void checkAlloButtonDisplay() {
 
-        driver.get("https://allo.ua/");
-        Thread.sleep(5000);
+        HomePage homePage = new HomePage(driver);
+        openUrl(alloUrl);
 
-        WebElement alloLogo = driver.findElement(By.xpath("//a[@class='v-logo']"));
-        Assert.assertTrue(alloLogo.isDisplayed(), "Логотип АЛЛО не відображається на головній сторінці!");
+        homePage.alloLogo();
 
-        driver.quit();
+        Assert.assertTrue(homePage.alloLogo().isDisplayed());
+
     }
 
     @Test
-    public void testAlloSearchFunctionality() throws InterruptedException {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://allo.ua/");
+    public void checkFenDisplay() throws InterruptedException {
 
-        Thread.sleep(5000);
+        openUrl(alloUrl);
+        sleep(5000);
 
         WebElement searchInput = driver.findElement(By.xpath("//input[@id='search-form__input']"));
         Assert.assertTrue(searchInput.isDisplayed(), "Поле пошуку не відображається на сторінці!");
@@ -37,7 +38,7 @@ public class AlloTest {
         WebElement searchButton = driver.findElement(By.xpath("//button[contains(@class, 'search-form__submit-button')]"));
         searchButton.click();
 
-        Thread.sleep(5000);
+        sleep(5000);
 
         WebElement firstProductTitle = driver.findElement(By.xpath("(//a[@class='product-card__title'])[1]"));
         String productText = firstProductTitle.getText();
@@ -45,14 +46,12 @@ public class AlloTest {
         Assert.assertTrue(productText.toLowerCase().contains("фен"),
                 "Перший товар у списку не містить слово 'Фен'! Знайдено товар: " + productText);
 
-        driver.quit();
     }
 
     @Test
     public void testAlloProductDetailVerification() throws InterruptedException {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://allo.ua/");
+
+        openUrl(alloUrl);
 
         WebElement alloLogo = driver.findElement(By.xpath("//a[@class='v-logo']"));
         Assert.assertTrue(alloLogo.isDisplayed(), "Логотип АЛЛО не відображається на головній сторінці!");
@@ -63,7 +62,7 @@ public class AlloTest {
         WebElement searchButton = driver.findElement(By.xpath("//button[contains(@class, 'search-form__submit-button')]"));
         searchButton.click();
 
-        Thread.sleep(5000);
+        sleep(5000);
 
         WebElement firstProduct = driver.findElement(By.xpath("(//a[@class='product-card__title'])[1]"));
         String firstProductTitleText = firstProduct.getText();
@@ -74,7 +73,7 @@ public class AlloTest {
 
         firstProduct.click();
 
-        Thread.sleep(5000);
+        sleep(5000);
 
         WebElement detailProductTitle = driver.findElement(By.xpath("//h1"));
         String actualProductName = detailProductTitle.getText();
@@ -82,21 +81,18 @@ public class AlloTest {
         Assert.assertEquals(actualProductName, savedProductName,
                 "Назва товару на детальній сторінці не збігається з назвою в результатах пошуку!");
 
-        driver.quit();
     }
 
     @Test
     public void testAlloBuyersSectionVerification() throws InterruptedException {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
 
-        driver.get("https://allo.ua/");
-        Thread.sleep(3000);
+        openUrl(alloUrl);
+        sleep(3000);
 
         WebElement buyersButton = driver.findElement(By.xpath("//span[contains(text(), 'Покупцям')]"));
         Assert.assertTrue(buyersButton.isDisplayed(), "Кнопка 'Покупцям' не відображається!");
         buyersButton.click();
-        Thread.sleep(2000);
+        sleep(2000);
 
         WebElement dropdownMenu = driver.findElement(By.xpath("//div[contains(@class, 'mh-button__dropdown')]"));
         Assert.assertTrue(dropdownMenu.isDisplayed(), "Випадаюче меню 'Покупцям' не відкрилося!");
@@ -104,7 +100,7 @@ public class AlloTest {
         WebElement deliveryOption = driver.findElement(By.xpath("//div[contains(@class, 'mh-button__dropdown')]//a[contains(@href, 'shipment_payment')]"));
         Assert.assertTrue(deliveryOption.isDisplayed(), "Пункт 'Доставка та оплата' не відображається в меню!");
         deliveryOption.click();
-        Thread.sleep(5000);
+        sleep(5000);
 
         String tabTitle = driver.getTitle();
         Assert.assertTrue(tabTitle.toLowerCase().contains("доставка"),
@@ -118,7 +114,5 @@ public class AlloTest {
 
         Assert.assertTrue(howToOrderButton.getText().contains("Як оформити замовлення"),
                 "Текст на кнопці не відповідає очікуваному! Знайдено: " + howToOrderButton.getText());
-
-        driver.quit();
     }
 }
