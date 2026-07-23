@@ -13,6 +13,8 @@ public class HomePage extends BasePage {
     }
     private final String ALLO_LOGO = "//a[@class='v-logo']";
     private final String CATALOG_BUTTON = "//div[@class='mh-catalog-btn']";
+    private final String SEARCH_FIELD = "//input[@id='search-form__input']";
+    private final String SEARCH_BUTTON = "//button[contains(@class, 'search-form__submit-button')]";
 
     public WebElement alloLogo() {
         return visibilityOfElementByXpath(ALLO_LOGO);
@@ -20,5 +22,13 @@ public class HomePage extends BasePage {
 
     public WebElement catalogButton() {
         return visibilityOfElementByXpath(CATALOG_BUTTON);
+    }
+
+    public WebElement searchField() {
+        return visibilityOfElementByXpath(SEARCH_FIELD);
+    }
+
+    public WebElement searchButton() {
+        return visibilityOfElementByXpath(SEARCH_BUTTON);
     }
 }

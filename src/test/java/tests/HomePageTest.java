@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.HomePage;
+import pages.SearchResultPage;
 
 import static java.lang.Thread.sleep;
 
@@ -26,25 +27,19 @@ public class HomePageTest extends TestInit {
     }
 
     @Test
-    public void checkFenDisplay() throws InterruptedException {
+    public void checkFenDisplay() {
+
+        HomePage homePage = new HomePage(driver);
+        SearchResultPage searchResultPage = new SearchResultPage(driver);
 
         openUrl(alloUrl);
-        sleep(5000);
 
-        WebElement searchInput = driver.findElement(By.xpath("//input[@id='search-form__input']"));
-        Assert.assertTrue(searchInput.isDisplayed(), "Поле пошуку не відображається на сторінці!");
-        searchInput.sendKeys("Фен");
+        Assert.assertTrue(homePage.searchField().isDisplayed());
 
-        WebElement searchButton = driver.findElement(By.xpath("//button[contains(@class, 'search-form__submit-button')]"));
-        searchButton.click();
+        homePage.searchField().sendKeys("Фен");
+        homePage.searchButton().click();
 
-        sleep(5000);
-
-        WebElement firstProductTitle = driver.findElement(By.xpath("(//a[@class='product-card__title'])[1]"));
-        String productText = firstProductTitle.getText();
-
-        Assert.assertTrue(productText.toLowerCase().contains("фен"),
-                "Перший товар у списку не містить слово 'Фен'! Знайдено товар: " + productText);
+        Assert.assertTrue(searchResultPage.firstGoods().getText().contains("Фен"));
 
     }
 
