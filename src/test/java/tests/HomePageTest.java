@@ -5,7 +5,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.GoodsPage;
 import pages.HomePage;
+import pages.SearchResultsPage;
 
 import static java.lang.Thread.sleep;
 
@@ -26,60 +28,46 @@ public class HomePageTest extends TestInit {
     }
 
     @Test
-    public void checkFenDisplay() throws InterruptedException {
+    public void checkFenDisplay() {
+
+        HomePage homePage = new HomePage(driver);
+        SearchResultsPage searchResultsPage = new SearchResultsPage(driver);
 
         openUrl(alloUrl);
-        sleep(5000);
 
-        WebElement searchInput = driver.findElement(By.xpath("//input[@id='search-form__input']"));
-        Assert.assertTrue(searchInput.isDisplayed(), "Поле пошуку не відображається на сторінці!");
-        searchInput.sendKeys("Фен");
+        Assert.assertTrue(homePage.searchField().isDisplayed());
 
-        WebElement searchButton = driver.findElement(By.xpath("//button[contains(@class, 'search-form__submit-button')]"));
-        searchButton.click();
+        homePage.searchField().sendKeys("Фен");
+        homePage.searchButton().click();
 
-        sleep(5000);
-
-        WebElement firstProductTitle = driver.findElement(By.xpath("(//a[@class='product-card__title'])[1]"));
-        String productText = firstProductTitle.getText();
-
-        Assert.assertTrue(productText.toLowerCase().contains("фен"),
-                "Перший товар у списку не містить слово 'Фен'! Знайдено товар: " + productText);
+        Assert.assertTrue(searchResultsPage.firstGoods().getText().contains("Фен"));
 
     }
 
     @Test
-    public void testAlloProductDetailVerification() throws InterruptedException {
+    public void testAlloProductDetailVerification() {
+
+        HomePage homePage = new HomePage(driver);
+        SearchResultsPage searchResultsPage = new SearchResultsPage(driver);
+        GoodsPage goodsPage = new GoodsPage(driver);
+
+        String airPods = "AirPods 4";
 
         openUrl(alloUrl);
 
-        WebElement alloLogo = driver.findElement(By.xpath("//a[@class='v-logo']"));
-        Assert.assertTrue(alloLogo.isDisplayed(), "Логотип АЛЛО не відображається на головній сторінці!");
+        homePage.alloLogoDisplayed();
+        homePage.enterValuesInSearchField(airPods);
+        homePage.clickSearchButton();
 
-        WebElement searchInput = driver.findElement(By.xpath("//input[@id='search-form__input']"));
-        searchInput.sendKeys("AirPods 3");
+        String expectedNameFirstAirPods = searchResultsPage.getNameFirstAirPods();
+        System.out.println(expectedNameFirstAirPods + "    очікуваний результат");
+        Assert.assertTrue(expectedNameFirstAirPods.contains("AirPods 4"));
 
-        WebElement searchButton = driver.findElement(By.xpath("//button[contains(@class, 'search-form__submit-button')]"));
-        searchButton.click();
+        searchResultsPage.clickFirstAirPods();
 
-        sleep(5000);
-
-        WebElement firstProduct = driver.findElement(By.xpath("(//a[@class='product-card__title'])[1]"));
-        String firstProductTitleText = firstProduct.getText();
-        Assert.assertTrue(firstProductTitleText.toLowerCase().contains("airpods"),
-                "Перший товар у результатах не є AirPods! Знайдено: " + firstProductTitleText);
-
-        String savedProductName = firstProductTitleText;
-
-        firstProduct.click();
-
-        sleep(5000);
-
-        WebElement detailProductTitle = driver.findElement(By.xpath("//h1"));
-        String actualProductName = detailProductTitle.getText();
-
-        Assert.assertEquals(actualProductName, savedProductName,
-                "Назва товару на детальній сторінці не збігається з назвою в результатах пошуку!");
+        String actualNameAirPods = goodsPage.getNameProductHeaderTitle();
+        System.out.println(actualNameAirPods + "    актуальний результат");
+        Assert.assertEquals(actualNameAirPods, expectedNameFirstAirPods);
 
     }
 
