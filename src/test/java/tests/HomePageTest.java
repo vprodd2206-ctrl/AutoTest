@@ -70,35 +70,25 @@ public class HomePageTest extends TestInit {
     }
 
     @Test
-    public void testAlloBuyersSectionVerification() throws InterruptedException {
+    public void testAlloBuyersSectionVerification() {
+
+        HomePage homePage = new HomePage(driver);
 
         openUrl(alloUrl);
-        sleep(3000);
 
-        WebElement buyersButton = driver.findElement(By.xpath("//span[contains(text(), 'Покупцям')]"));
-        Assert.assertTrue(buyersButton.isDisplayed(), "Кнопка 'Покупцям' не відображається!");
-        buyersButton.click();
-        sleep(2000);
+        Assert.assertTrue(homePage.buyersButton().isDisplayed());
+        homePage.clickBuyersButton();
 
-        WebElement dropdownMenu = driver.findElement(By.xpath("//div[contains(@class, 'mh-button__dropdown')]"));
-        Assert.assertTrue(dropdownMenu.isDisplayed(), "Випадаюче меню 'Покупцям' не відкрилося!");
+        Assert.assertTrue(homePage.dropdownMenu().isDisplayed());
 
-        WebElement deliveryOption = driver.findElement(By.xpath("//div[contains(@class, 'mh-button__dropdown')]//a[contains(@href, 'shipment_payment')]"));
-        Assert.assertTrue(deliveryOption.isDisplayed(), "Пункт 'Доставка та оплата' не відображається в меню!");
-        deliveryOption.click();
-        sleep(5000);
+        Assert.assertTrue(homePage.deliveryOption().isDisplayed());
+        homePage.clickDeliveryOption();
 
         String tabTitle = driver.getTitle();
-        Assert.assertTrue(tabTitle.toLowerCase().contains("доставка"),
-                "Тайтл вкладки браузера не містить згадки про доставку! Поточний тайтл: " + tabTitle);
 
-        WebElement helpMenuContainer = driver.findElement(By.xpath("//div[@class='sp-main-tab']"));
-        Assert.assertTrue(helpMenuContainer.isDisplayed(), "Блок меню розділів допомоги 'sp-main-tab' не відображається на сторінці!");
-
-        WebElement howToOrderButton = driver.findElement(By.xpath("//div[@class='sp-main-tab']//button[contains(text(), 'Як оформити замовлення')]"));
-        Assert.assertTrue(howToOrderButton.isDisplayed(), "Кнопка 'Як оформити замовлення?' не відображається!");
-
-        Assert.assertTrue(howToOrderButton.getText().contains("Як оформити замовлення"),
-                "Текст на кнопці не відповідає очікуваному! Знайдено: " + howToOrderButton.getText());
+        Assert.assertTrue(tabTitle.toLowerCase().contains("доставка"));
+        Assert.assertTrue(homePage.helpMenuContainer().isDisplayed());
+        Assert.assertTrue(homePage.howToOrderButton().isDisplayed());
+        Assert.assertTrue(homePage.howToOrderButton().getText().contains("Як оформити замовлення"));
     }
 }
