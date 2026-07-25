@@ -4,8 +4,8 @@ import basesClass.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class SearchResultsPage extends BasePage {
-    public SearchResultsPage(WebDriver driver) {
+public class SearchResultPage extends BasePage {
+    public SearchResultPage(WebDriver driver) {
         super(driver);
     }
 

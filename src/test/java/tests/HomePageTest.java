@@ -7,7 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.GoodsPage;
 import pages.HomePage;
-import pages.SearchResultsPage;
+import pages.SearchResultPage;
 
 import static java.lang.Thread.sleep;
 
@@ -31,7 +31,7 @@ public class HomePageTest extends TestInit {
     public void checkFenDisplay() {
 
         HomePage homePage = new HomePage(driver);
-        SearchResultsPage searchResultsPage = new SearchResultsPage(driver);
+        SearchResultPage searchResultPage = new SearchResultPage(driver);
 
         openUrl(alloUrl);
 
@@ -40,7 +40,7 @@ public class HomePageTest extends TestInit {
         homePage.searchField().sendKeys("Фен");
         homePage.searchButton().click();
 
-        Assert.assertTrue(searchResultsPage.firstGoods().getText().contains("Фен"));
+        Assert.assertTrue(searchResultPage.firstGoods().getText().contains("Фен"));
 
     }
 
@@ -48,7 +48,7 @@ public class HomePageTest extends TestInit {
     public void testAlloProductDetailVerification() {
 
         HomePage homePage = new HomePage(driver);
-        SearchResultsPage searchResultsPage = new SearchResultsPage(driver);
+        SearchResultPage searchResultPage = new SearchResultPage(driver);
         GoodsPage goodsPage = new GoodsPage(driver);
 
         String airPods = "AirPods 4";
@@ -59,11 +59,11 @@ public class HomePageTest extends TestInit {
         homePage.enterValuesInSearchField(airPods);
         homePage.clickSearchButton();
 
-        String expectedNameFirstAirPods = searchResultsPage.getNameFirstAirPods();
+        String expectedNameFirstAirPods = searchResultPage.getNameFirstAirPods();
         System.out.println(expectedNameFirstAirPods + "    очікуваний результат");
         Assert.assertTrue(expectedNameFirstAirPods.contains("AirPods 4"));
 
-        searchResultsPage.clickFirstAirPods();
+        searchResultPage.clickFirstAirPods();
 
         String actualNameAirPods = goodsPage.getNameProductHeaderTitle();
         System.out.println(actualNameAirPods + "    актуальний результат");
