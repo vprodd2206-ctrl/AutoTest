@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.GoodsPage;
 import pages.HomePage;
 import pages.SearchResultPage;
 
@@ -44,38 +45,28 @@ public class HomePageTest extends TestInit {
     }
 
     @Test
-    public void testAlloProductDetailVerification() throws InterruptedException {
+    public void testAlloProductDetailVerification() {
+
+        HomePage homePage = new HomePage(driver);
+        SearchResultPage searchResultPage = new SearchResultPage(driver);
+        GoodsPage goodsPage = new GoodsPage(driver);
+
+        String airPods = "AirPods 4";
 
         openUrl(alloUrl);
 
-        WebElement alloLogo = driver.findElement(By.xpath("//a[@class='v-logo']"));
-        Assert.assertTrue(alloLogo.isDisplayed(), "Логотип АЛЛО не відображається на головній сторінці!");
+        homePage.alloLogoDisplayed();
+        homePage.enterValuesInSearchField(airPods);
+        homePage.clickSearchButton();
 
-        WebElement searchInput = driver.findElement(By.xpath("//input[@id='search-form__input']"));
-        searchInput.sendKeys("AirPods 3");
+        String expectedNameFirstAirPods = searchResultPage.getNameFirstAirPods();
+        Assert.assertTrue(expectedNameFirstAirPods.contains("AirPods 4"));
 
-        WebElement searchButton = driver.findElement(By.xpath("//button[contains(@class, 'search-form__submit-button')]"));
-        searchButton.click();
+        searchResultPage.clickFirstAirPods();
 
-        sleep(5000);
+        String actualNameAirPods = goodsPage.getNameProductHeaderTitle();
 
-        WebElement firstProduct = driver.findElement(By.xpath("(//a[@class='product-card__title'])[1]"));
-        String firstProductTitleText = firstProduct.getText();
-        Assert.assertTrue(firstProductTitleText.toLowerCase().contains("airpods"),
-                "Перший товар у результатах не є AirPods! Знайдено: " + firstProductTitleText);
-
-        String savedProductName = firstProductTitleText;
-
-        firstProduct.click();
-
-        sleep(5000);
-
-        WebElement detailProductTitle = driver.findElement(By.xpath("//h1"));
-        String actualProductName = detailProductTitle.getText();
-
-        Assert.assertEquals(actualProductName, savedProductName,
-                "Назва товару на детальній сторінці не збігається з назвою в результатах пошуку!");
-
+        Assert.assertEquals(actualNameAirPods, expectedNameFirstAirPods);
     }
 
     @Test
