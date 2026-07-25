@@ -60,15 +60,13 @@ public class HomePageTest extends TestInit {
         homePage.clickSearchButton();
 
         String expectedNameFirstAirPods = searchResultPage.getNameFirstAirPods();
-        System.out.println(expectedNameFirstAirPods + "    очікуваний результат");
         Assert.assertTrue(expectedNameFirstAirPods.contains("AirPods 4"));
 
         searchResultPage.clickFirstAirPods();
 
         String actualNameAirPods = goodsPage.getNameProductHeaderTitle();
-        System.out.println(actualNameAirPods + "    актуальний результат");
-        Assert.assertEquals(actualNameAirPods, expectedNameFirstAirPods);
 
+        Assert.assertEquals(actualNameAirPods, expectedNameFirstAirPods);
     }
 
     @Test
