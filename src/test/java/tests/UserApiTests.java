@@ -1,4 +1,4 @@
-package tests; // Перевір, щоб назва пакету збігалася з твоєю
+package tests;
 
 import dto.RspCreateUserDTO;
 import dto.UserBuilder;
@@ -20,8 +20,6 @@ public class UserApiTests {
     @BeforeClass
     public void setup() {
         RestAssured.baseURI = "https://petstore.swagger.io/v2";
-
-        // Беремо готового юзера з нашого нового класу
         USER = UserBuilder.createDefaultUser();
     }
 
