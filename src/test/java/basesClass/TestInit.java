@@ -12,7 +12,6 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import java.io.ByteArrayInputStream;
 
-@Listeners(CustomTestListener.class)
 public class TestInit {
     public WebDriver driver;
 
