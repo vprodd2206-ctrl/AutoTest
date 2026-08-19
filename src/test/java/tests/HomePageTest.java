@@ -20,11 +20,11 @@ public class HomePageTest extends TestInit {
 
         HomePage homePage = new HomePage(driver);
         openUrl(alloUrl);
+        Assert.fail("Штучне падіння для перевірки скріншоту Allure");
 
         homePage.alloLogo();
 
         Assert.assertTrue(homePage.alloLogo().isDisplayed());
-        Assert.fail("Штучне падіння для перевірки скріншоту Allure");
 
     }
 

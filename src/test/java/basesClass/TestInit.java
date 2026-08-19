@@ -6,23 +6,27 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.ITestResult;
+import io.qameta.allure.Allure;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import java.io.ByteArrayInputStream;
 
 @Listeners(CustomTestListener.class)
 public class TestInit {
     public WebDriver driver;
 
-    @BeforeMethod
-    public void openBrowser() {
-        WebDriverManager.chromedriver().setup();
+    @AfterMethod
+    public void closeBrowser(ITestResult result) {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            Allure.addAttachment("Скріншот падіння",
+                    new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
+        }
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-
-        driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
+        // Після цього спокійно закриваємо браузер
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @AfterMethod
