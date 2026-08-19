@@ -24,6 +24,7 @@ public class HomePageTest extends TestInit {
         homePage.alloLogo();
 
         Assert.assertTrue(homePage.alloLogo().isDisplayed());
+        Assert.fail("Штучне падіння для перевірки скріншоту Allure");
 
     }
 
