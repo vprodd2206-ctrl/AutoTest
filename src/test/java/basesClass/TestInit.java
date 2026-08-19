@@ -43,4 +43,7 @@ public class TestInit {
             driver.quit();
         }
     }
+    public void openUrl(String url) {
+        driver.get(url);
+    }
 }
